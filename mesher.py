@@ -31,9 +31,9 @@ x_size_3 = x_size_2
 y_size_3 = 0.0005
 x_size_4 = x_size_3
 y_size_4 = 0.0001
-x_size_5 = 0.005
-y_size_5 = y_size_1
-x_size_6 = x_size_5
+# x_size_5 = 0.005
+# y_size_5 = y_size_1
+# x_size_6 = x_size_5
 '''
 # rough mesh
 x_size_1 = 0.001
@@ -54,7 +54,7 @@ x_size_6 = x_size_5
 # origin - at the left bottom point of HX
 l_total = l_hx + l_guide
 h_total = t_3he + h_fin + t_cu + r_4he
-l_mesh = round(l_hx / x_size_1) + round(l_guide / x_size_5)  # length
+l_mesh = round(l_hx / x_size_1)  # length
 h_mesh = round(r_4he / y_size_1) + round(t_cu / y_size_2) + round(h_fin / y_size_3) + round(t_3he / y_size_4)  # height
 # initializing empty mesh arrays
 mesh_m = np.ones([l_mesh, h_mesh], dtype=np.int)  # element material (1 - 'empty', 2 - 'cu', 3 - '3he', 4 - '4he')
@@ -161,6 +161,7 @@ mesh_l[x_block_a:x_block_b, y_block_a:y_block_b] = l_block / l_mesh_block
 mesh_h[x_block_a:x_block_b, y_block_a:y_block_b] = h_block / h_mesh_block
 mesh_t[x_block_a:x_block_b, y_block_a:y_block_b] = t_block_pumping
 mesh_r[x_block_a:x_block_b, y_block_a:y_block_b] = r_block
+'''
 # helium-4 guide between UCN bottle and HX
 m_block = 4
 t_block = init_he4_temp
@@ -180,6 +181,7 @@ mesh_l[x_block_a:x_block_b, y_block_a:y_block_b] = l_block / l_mesh_block
 mesh_h[x_block_a:x_block_b, y_block_a:y_block_b] = h_block / h_mesh_block
 mesh_t[x_block_a:x_block_b, y_block_a:y_block_b] = t_block
 mesh_r[x_block_a:x_block_b, y_block_a:y_block_b] = r_block
+'''
 
 print('# mesh {} x {} created'.format(l_mesh, h_mesh))
 
@@ -264,10 +266,10 @@ print('# mesh is analyzed, {} operable cell pairs are found'.format(len(mesh_ops
 
 # cells where to apply some heat
 Q = 10  # W, total heat deposition
-l_q = 0.5  # m, length of region to apply heat
-r_q = 0.05  # m, radius of region to apply heat
-l_q_cells = round(l_q/x_size_5)
-r_q_cells = round(r_q/y_size_5)
+l_q = l_hx/2  # m, length of region to apply heat
+r_q = r_4he/2  # m, radius of region to apply heat
+l_q_cells = round(l_q/x_size_1)
+r_q_cells = round(r_q/y_size_1)
 V_q = l_q * r_q**2 * np.pi
 for i_heat in range(l_q_cells):
     for j_heat in range(r_q_cells):
